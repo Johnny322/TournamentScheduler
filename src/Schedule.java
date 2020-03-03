@@ -2,13 +2,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    private List<Timeslot> timeslots;
+    private List<TimeSlot> timeSlots;
 
-    public Schedule(int _tournamentSize) {
-        this.timeslots = new ArrayList<>();
+    public Schedule() {
+        this.timeSlots = new ArrayList<>();
     }
 
-    public List<Timeslot> getTimeslots() {
-        return timeslots;
+    public void addTimesSlot(TimeSlot timeSlot) {
+        this.timeSlots.add(timeSlot);
+    }
+
+    public List<TimeSlot> getTimeSlots() {
+        return timeSlots;
     }
 }

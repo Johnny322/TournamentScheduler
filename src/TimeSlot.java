@@ -1,21 +1,24 @@
-public class Timeslot {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TimeSlot {
     private Match basketball;
     private Match football;
     private Match volleyball;
 
-    private Timeslot() {
+    public TimeSlot() {
     }
 
-    private void initializeMatch(Team team1, Team team2, Time time, Sport _sport) {
+    private void initializeMatch(Match match, Time time, Sport _sport) {
         switch (_sport){
             case FOOTBALL:
-                this.football = new Match(team1, team2, time, _sport);
+                this.football = match;
                 break;
             case BASKETBALL:
-                this.basketball = new Match(team1, team2, time, _sport);
+                this.basketball = match;
                 break;
             case VOLLEYBALL:
-                this.volleyball = new Match(team1, team2, time, _sport);
+                this.volleyball = match;
                 break;
         }
 
@@ -45,5 +48,13 @@ public class Timeslot {
 
     public Match getVolleyball() {
         return volleyball;
+    }
+
+    public List<Match> getAllMatches() {
+        List<Match> matches = new ArrayList<>();
+        matches.add(getBasketball());
+        matches.add(getFootball());
+        matches.add(getVolleyball());
+        return matches;
     }
 }
