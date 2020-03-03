@@ -223,7 +223,7 @@ public class Scheduler {
         }
     }
 
-    //TODO Not yet fixed
+    //TODO Not yet fixed: https://www.geeksforgeeks.org/sudoku-backtracking-7/
     /*public static boolean solveSchedule(Schedule schedule, int n)
     {
         int row = -1;
