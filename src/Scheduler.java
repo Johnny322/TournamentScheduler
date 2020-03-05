@@ -1,15 +1,20 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Scheduler {
     private List<Group> football;
     private List<Group> basketball;
     private List<Group> volleyball;
     private Schedule schedule;
+    private Queue<Match> queue;
+    private List<Match> matches;
     private int total;
 
     public Scheduler() {
         schedule = new Schedule();
+        this.matches = new ArrayList<>();
+        this.volleyball = new ArrayList<>();
+        this.basketball = new ArrayList<>();
+        this.football = new ArrayList<>();
     }
 
     public void makeGroups(Sport _sport, List<Integer> groupIds) {
@@ -21,7 +26,7 @@ public class Scheduler {
             case FOOTBALL:
 
                 if(groupIds.size()<13) {
-                    while(i < groupIds.size()-1) {
+                    while(i < groupIds.size()) {
                         if(i % 3 == 0) {
                             teams1.add(new Team(groupIds.get(i)));
                         }
@@ -33,13 +38,12 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.FOOTBALL));
-                    _groups.add(new Group(teams2, Sport.FOOTBALL));
-                    _groups.add(new Group(teams3, Sport.FOOTBALL));
+                    football.add(new Group(teams1, Sport.FOOTBALL));
+                    football.add(new Group(teams2, Sport.FOOTBALL));
+                    football.add(new Group(teams3, Sport.FOOTBALL));
                 } else {
                     List<Team> teams4 = new ArrayList<>();
-                    while(i < groupIds.size()-1) {
+                    while(i < groupIds.size()) {
                         if(i % 4 == 0) {
                             teams1.add(new Team(groupIds.get(i)));
                         }
@@ -54,17 +58,16 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.FOOTBALL));
-                    _groups.add(new Group(teams2, Sport.FOOTBALL));
-                    _groups.add(new Group(teams3, Sport.FOOTBALL));
-                    _groups.add(new Group(teams4, Sport.FOOTBALL));
+                    football.add(new Group(teams1, Sport.FOOTBALL));
+                    football.add(new Group(teams2, Sport.FOOTBALL));
+                    football.add(new Group(teams3, Sport.FOOTBALL));
+                    football.add(new Group(teams4, Sport.FOOTBALL));
                 }
                 break;
             case BASKETBALL:
 
                 if(groupIds.size()<13) {
-                    while(i < groupIds.size()-1) {
+                    while(i < groupIds.size()) {
                         if(i % 3 == 0) {
                             teams1.add(new Team(groupIds.get(i)));
                         }
@@ -76,13 +79,12 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.BASKETBALL));
-                    _groups.add(new Group(teams2, Sport.BASKETBALL));
-                    _groups.add(new Group(teams3, Sport.BASKETBALL));
+                    basketball.add(new Group(teams1, Sport.BASKETBALL));
+                    basketball.add(new Group(teams2, Sport.BASKETBALL));
+                    basketball.add(new Group(teams3, Sport.BASKETBALL));
                 } else {
                     List<Team> teams4 = new ArrayList<>();
-                    while(i < groupIds.size()-1) {
+                    while(i < groupIds.size()) {
                         if(i % 4 == 0) {
                             teams1.add(new Team(groupIds.get(i)));
                         }
@@ -97,16 +99,15 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.BASKETBALL));
-                    _groups.add(new Group(teams2, Sport.BASKETBALL));
-                    _groups.add(new Group(teams3, Sport.BASKETBALL));
-                    _groups.add(new Group(teams4, Sport.BASKETBALL));
+                    basketball.add(new Group(teams1, Sport.BASKETBALL));
+                    basketball.add(new Group(teams2, Sport.BASKETBALL));
+                    basketball.add(new Group(teams3, Sport.BASKETBALL));
+                    basketball.add(new Group(teams4, Sport.BASKETBALL));
                 }
                 break;
             case VOLLEYBALL:
                 if(groupIds.size()<13) {
-                    while(i < groupIds.size()-1) {
+                    while(i < groupIds.size()) {
                         if(i % 3 == 0) {
                             teams1.add(new Team(groupIds.get(i)));
                         }
@@ -118,10 +119,9 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.VOLLEYBALL));
-                    _groups.add(new Group(teams2, Sport.VOLLEYBALL));
-                    _groups.add(new Group(teams3, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams1, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams2, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams3, Sport.VOLLEYBALL));
                 } else {
                     List<Team> teams4 = new ArrayList<>();
                     while(i < groupIds.size()-1) {
@@ -139,31 +139,16 @@ public class Scheduler {
                         }
                         i++;
                     }
-                    List<Group> _groups = new ArrayList<>();
-                    _groups.add(new Group(teams1, Sport.VOLLEYBALL));
-                    _groups.add(new Group(teams2, Sport.VOLLEYBALL));
-                    _groups.add(new Group(teams3, Sport.VOLLEYBALL));
-                    _groups.add(new Group(teams4, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams1, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams2, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams3, Sport.VOLLEYBALL));
+                    volleyball.add(new Group(teams4, Sport.VOLLEYBALL));
                 }
                 break;
         }
     }
 
-    public boolean evaluateTeams(Match match, TimeSlot timeslot) {
-        for(Match match1 : timeslot.getAllMatches()) {
-            for(Team team : match1.getAllTeams()) {
-                if(team.getId() == match.getTeam1().getId()) {
-                    return false;
-                }
-                if(team.getId() == match.getTeam2().getId()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public List<Match> generateAllMatchesForSport(Sport _sport) {
+    public void generateAllMatchesForSport(Sport _sport) {
         List<Match> matches = new ArrayList<>();
         switch (_sport) {
             case FOOTBALL:
@@ -175,6 +160,7 @@ public class Scheduler {
                             matches.add(new Match(group.getTeams().get(count), group.getTeams().get(j+1), _sport));
                             total++;
                         }
+                        count++;
                     }
                 }
                 break;
@@ -187,6 +173,7 @@ public class Scheduler {
                             matches.add(new Match(group.getTeams().get(count), group.getTeams().get(j+1), _sport));
                             total++;
                         }
+                        count++;
                     }
                 }
                 break;
@@ -199,81 +186,174 @@ public class Scheduler {
                             matches.add(new Match(group.getTeams().get(count), group.getTeams().get(j+1), _sport));
                             total++;
                         }
+                        count++;
                     }
                 }
                 break;
         }
 
-        return matches;
-    }
-
-    public Match getMatch(int iterator) {
-        return schedule.getTimeSlots().get(iterator / 3).getAllMatches().get(iterator % 3);
+        this.matches.addAll(matches);
     }
 
     public void makeAllTimeSlots() {
         if(total % 3 != 0) {
             for (int i = 0; i < total / 3 + 1; i++) {
-                schedule.addTimesSlot(new TimeSlot());
+                if(i % 3 == 0) {
+                    schedule.addTimesSlot(new TimeSlot(Time.FIRST));
+                } else if (i % 3 == 1) {
+                    schedule.addTimesSlot(new TimeSlot(Time.SECOND));
+                } else {
+                    schedule.addTimesSlot(new TimeSlot(Time.THIRD));
+                }
             }
         } else {
             for (int i = 0; i < total / 3; i++) {
-                schedule.addTimesSlot(new TimeSlot());
+                if(i % 3 == 0) {
+                    schedule.addTimesSlot(new TimeSlot(Time.FIRST));
+                } else if (i % 3 == 1) {
+                    schedule.addTimesSlot(new TimeSlot(Time.SECOND));
+                } else {
+                    schedule.addTimesSlot(new TimeSlot(Time.THIRD));
+                }
             }
         }
     }
 
-    //TODO Not yet fixed: https://www.geeksforgeeks.org/sudoku-backtracking-7/
-    /*public static boolean solveSchedule(Schedule schedule, int n)
-    {
-        int row = -1;
-        int col = -1;
-        boolean isEmpty = true;
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if (board[i][j] == 0)
-                {
-                    row = i;
-                    col = j;
+    public Schedule getSchedule() {
+        return schedule;
+    }
 
-                    // we still have some remaining
-                    // missing values in Sudoku
-                    isEmpty = false;
-                    break;
+    public List<Match> getMatches() {
+        return matches;
+    }
+
+    public void initializeList() {
+        this.queue = new LinkedList<>();
+        for(Match match : matches) {
+            this.queue.add(match);
+        }
+    }
+
+    public String printSchedule() {
+        String print = "";
+        int i = 0;
+        for(TimeSlot timeSlot : this.schedule.getTimeSlots()) {
+            print = print.concat("Day " + i/3 + ", timeslot: " + timeSlot.getTime().toString() + "\n");
+            for(Match match : timeSlot.getAllMatches()) {
+                if(match != null) {
+                    print = print.concat(match.toString());
+                } else {
+                    print = print.concat("Currently null \n");
                 }
             }
-            if (!isEmpty)
-            {
+
+            i++;
+        }
+        return print;
+    }
+
+    //TODO Not yet fixed: https://www.geeksforgeeks.org/sudoku-backtracking-7/
+    public boolean solveSchedule(Schedule schedule)
+    {
+        System.out.println(printSchedule());
+        int matchSize = this.queue.size();
+        System.out.println("Goes into new recursion");
+        boolean isEmpty = true;
+        for (int i = 0; i < matches.size(); i++)
+        {
+            System.out.println("Trying with " + i + " as iterator");
+            if (schedule.getMatch(i) == null) {
+                isEmpty = false;
                 break;
+            } else {
+                System.out.println("This iterator is not good: " + i);
             }
         }
+
+
 
         // no empty space left
         if (isEmpty)
         {
+            System.out.println("Is true");
             return true;
         }
 
         // else for each-row backtrack
-        for (int num = 1; num <= n; num++)
+        for (int num = 0; num < matchSize-1; num++)
         {
-            if (isSafe(board, row, col, num))
-            {
-                board[row][col] = num;
-                if (solveSudoku(board, n))
-                {
-                    // print(board, n);
-                    return true;
+            if(schedule.getMatch(num) == null) {
+                System.out.println("Queue size = " + this.queue.size());
+                System.out.println("Printing queue: ");
+                for(Match match : this.queue) {
+                    System.out.println(match.toString());
                 }
-                else
+                Match match = this.queue.poll();
+                System.out.println(match.toString());
+                System.out.println("Trying to set match " + match.toString() + " to timeSlot " + schedule.getTimeSlots().get(num / 3).getTime().toString());
+                if (schedule.evaluateTeams(match, schedule.getTimeSlots().get(num / 3), num))
                 {
-                    board[row][col] = 0; // replace it
+                    schedule.getTimeSlots().get(num / 3).initializeMatch(match);
+                    System.out.println("Match removed: " + match.toString());
+                    if (solveSchedule(schedule))
+                    {
+                        // print(board, n);
+                        return true;
+                    }
+                    else
+                    {
+                        System.out.println("Removing match: " + match.toString() + " from schedule at:" + schedule.getTimeSlots().get(num/3).getTime().toString() + " at " + num/3);
+                        queue.add(schedule.getTimeSlots().get(num / 3).deleteMatch(match));
+                    }
+                } else {
+                    this.queue.add(match);
                 }
             }
+
         }
         return false;
     }
-*/
+
+    public String printGroups() {
+        String groups = "";
+        groups = groups.concat("Football groups: \n");
+        System.out.println(groups);
+        int j = 1;
+        for(Group group : football) {
+            groups = groups.concat("Group " + j + "\n");
+            for(Team i : group.getTeams()) {
+                groups = groups.concat(i.getId() + ", ");
+            }
+            j++;
+        }
+        groups = groups.concat("\n");
+        groups = groups.concat("Basketball groups: \n");
+        j = 1;
+        for(Group group : basketball) {
+            groups = groups.concat("Group " + j + "\n");
+            for(Team i : group.getTeams()) {
+                groups = groups.concat(i.getId() + ", ");
+            }
+            j++;
+        }
+        groups = groups.concat("\n");
+        groups = groups.concat("Volleyball groups: \n");
+        j = 1;
+        for(Group group : volleyball) {
+            groups = groups.concat("Group " + j + "\n");
+            for(Team i : group.getTeams()) {
+                groups = groups.concat(i.getId() + ", ");
+            }
+            j++;
+        }
+        return groups;
+    }
+
+    public String printAllMatches() {
+        String s = "";
+        for(Match match : this.matches) {
+            s = s.concat(match.toString());
+        }
+        return s;
+    }
 }

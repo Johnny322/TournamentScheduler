@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class Match {
+public class Match implements Comparable {
     private Team team1;
     private Team team2;
-    private Time time;
     private Sport sport;
 
 
@@ -34,12 +34,21 @@ public class Match {
         return teams;
     }
 
-    public Time getTime() {
-        return time;
+    @Override
+    public String toString() {
+        return team1.getId() + " vs " + team2.getId() + " in " + sport.toString() + "\n";
     }
 
     @Override
-    public String toString() {
-        return team1.getId() + " vs " + team2.getId() + " at " + time.toString();
+    public int compareTo(Object o) {
+        double random1 = Math.random();
+        double random2 = Math.random();
+
+        if(random1 < random2) {
+            return 1;
+        } else {
+            return -1;
+        }
+
     }
 }
