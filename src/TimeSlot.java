@@ -9,6 +9,9 @@ public class TimeSlot {
 
     public TimeSlot(Time _time) {
         this.time = _time;
+        this.volleyball = null;
+        this.football = null;
+        this.basketball = null;
     }
 
     public void initializeMatch(Match match) {
@@ -27,39 +30,36 @@ public class TimeSlot {
     }
 
     public boolean checkIfSportOccupied(Match match) {
-        switch (match.getSport()) {
-            case FOOTBALL:
-                if(football == null) {
-                    return true;
-                }
-            case BASKETBALL:
-                if(basketball == null) {
-                    return true;
-                }
-            case VOLLEYBALL:
-                if(volleyball == null) {
-                    return true;
-                }
-
+        System.out.println("Checking if " + match.getSport().toString() + " is empty");
+        if(match.getSport() == Sport.FOOTBALL) {
+            if(this.football != null) {
+                System.out.println(match.getSport().toString() + " is NOT empty");
+                return true;
+            }
         }
+        if(match.getSport() == Sport.VOLLEYBALL) {
+            if(this.volleyball != null) {
+                System.out.println(match.getSport().toString() + " is NOT empty");
+                return true;
+            }
+        }
+        if(match.getSport() == Sport.BASKETBALL) {
+            if(this.basketball != null) {
+                System.out.println(match.getSport().toString() + " is NOT empty");
+                return true;
+            }
+        }
+        System.out.println(match.getSport().toString() + " is empty");
         return false;
     }
 
     public Match deleteMatch(Match match) {
-        Match matchReturn = null;
-        switch (match.getSport()){
-            case FOOTBALL:
-                matchReturn = this.football;
-                this.football = null;
-                break;
-            case BASKETBALL:
-                matchReturn = this.basketball;
-                this.basketball = null;
-                break;
-            case VOLLEYBALL:
-                matchReturn = this.volleyball;
-                this.volleyball = null;
-                break;
+        if (match.getSport() == Sport.FOOTBALL) {
+            this.football = null;
+        } else if (match.getSport() == Sport.BASKETBALL) {
+            this.basketball = null;
+        } else if (match.getSport() == Sport.VOLLEYBALL) {
+            this.volleyball = null;
         }
         return match;
     }

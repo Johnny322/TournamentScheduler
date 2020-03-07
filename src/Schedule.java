@@ -43,8 +43,8 @@ public class Schedule {
     }
 
     public boolean evaluateTeams(Match match, TimeSlot timeslot, int iterator) {
-        if(!timeslot.checkIfSportOccupied(match)) {
-            System.out.println("This is false");
+        if(timeslot.checkIfSportOccupied(match)) {
+            System.out.println("Match is occupied");
             return false;
         }
         for(TimeSlot _timeSlot : getTimeSlotsForDay(timeslot, iterator / 3)) {
@@ -52,11 +52,11 @@ public class Schedule {
                 if(match1 != null) {
                     for (Team team : match1.getAllTeams()) {
                         if (team.getId() == match.getTeam1().getId()) {
-                            System.out.println("One is false");
+                            System.out.println("A team is named the same as team1");
                             return false;
                         }
                         if (team.getId() == match.getTeam2().getId()) {
-                            System.out.println("Two is false");
+                            System.out.println("A team is named the same as team2");
                             return false;
                         }
                     }
