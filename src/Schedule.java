@@ -39,7 +39,7 @@ public class Schedule {
             timeSlots1.add(this.timeSlots.get(iterator - 1));
             timeSlots1.add(this.timeSlots.get(iterator - 2));
         }
-        return timeSlots;
+        return timeSlots1;
     }
 
     public boolean evaluateTeams(Match match, TimeSlot timeslot, int iterator) {
